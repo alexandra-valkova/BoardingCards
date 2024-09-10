@@ -1,0 +1,38 @@
+@TravelAPI_HostAddress = http://localhost:5257
+
+POST {{TravelAPI_HostAddress}}/boarding-cards/summary/
+Accept: application/json
+Content-Type: application/json
+
+[
+  {
+    "Type": "Bus",
+    "Origin": "Barcelona",
+    "Destination": "Gerona Airport"
+  },
+  {
+    "Type": "Flight",
+    "Origin": "Stockholm",
+    "Destination": "New York JFK",
+    "Number": "SK22",
+    "Gate": "22",
+    "Seat": "7B",
+    "Baggage": "will be automatically transferred from your last leg"
+  },
+  {
+    "Type": "Train",
+    "Origin": "Madrid",
+    "Destination": "Barcelona",
+    "Number": "78A",
+    "Seat": "45B"
+  },
+  {
+    "Type": "Flight",
+    "Origin": "Gerona Airport",
+    "Destination": "Stockholm",
+    "Number": "SK455",
+    "Gate": "45B",
+    "Seat": "3A",
+    "Baggage": "drop at ticket counter 344"
+  }
+]
