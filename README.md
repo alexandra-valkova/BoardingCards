@@ -1,4 +1,4 @@
-﻿# Travel API
+﻿# Boarding Cards
 ASP.NET 8 Web API that puts boarding cards in order 🎫 and returns a summary of the given journey 🧳
 
 ## Structure
@@ -6,6 +6,7 @@ ASP.NET 8 Web API that puts boarding cards in order 🎫 and returns a summary o
 - _**Application**_ - use cases with **MediatR**, validation with **FluentValidation** and services;
 - _**API**_ - Minimal API with **Swagger UI**, **Swashbuckle** and **Carter**;
 - _**Tests**_ - Unit tests with **xUnit** and **FluentAssertions**;
+- _**Blazor**_ - Blazor Web App (Server) that consumes the API (work in progress 🚧);
 
 
 ## Task
@@ -23,5 +24,10 @@ For instance the API should be able to take an unordered set of boarding cards, 
 
 The list should be defined in a format that's compatible with the input format.
 
-## Swagger UI
-![TravelAPI Swagger UI](swagger-ui.png)
+## Screenshots
+
+### Blazor
+![Blazor Web App](screenshots/boarding-cards-blazor.png)
+
+### Swagger UI
+![API Swagger UI](screenshots/boarding-cards-swagger-ui.png)

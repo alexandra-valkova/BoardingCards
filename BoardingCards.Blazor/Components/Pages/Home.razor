@@ -1,0 +1,139 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@inject BoardingCardsClient client
+
+<PageTitle>Home</PageTitle>
+
+<h1>Boarding Cards 🎫</h1>
+
+<p class="lead">An application for sorting boarding cards and getting a journey summary based on them.</p>
+
+<div class="mb-3">
+    <label for="type" class="form-label">Type</label>
+    <select @bind="Type" id="type" class="form-select">
+        <option value="@BoardingCardType.Bus">Bus</option>
+        <option value="@BoardingCardType.Train">Train</option>
+        <option value="@BoardingCardType.Flight">Flight</option>
+    </select>
+</div>
+
+<div class="mb-3">
+    <label for="origin" class="form-label">Origin</label>
+    <input type="text" id="origin" @bind="Origin" placeholder="Madrid" class="form-control" />
+</div>
+
+<div class="mb-3">
+    <label for="destination" class="form-label">Destination</label>
+    <input type="text" id="destination" @bind="Destination" placeholder="Barcelona" class="form-control" />
+</div>
+
+@if (Type is BoardingCardType.Train or BoardingCardType.Flight)
+{
+    <div class="mb-3">
+        <label for="origin" class="form-label">Number</label>
+        <input type="text" id="origin" @bind="Number" placeholder="78A" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label for="destination" class="form-label">Seat</label>
+        <input type="text" id="destination" @bind="Seat" placeholder="45B" class="form-control" />
+    </div>
+
+    @if (Type is BoardingCardType.Flight)
+    {
+        <div class="mb-3">
+            <label for="origin" class="form-label">Gate</label>
+            <input type="text" id="origin" @bind="Gate" placeholder="22" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label for="destination" class="form-label">Baggage</label>
+            <input type="text" id="destination" @bind="Baggage" placeholder="description" class="form-control" />
+        </div>
+    }
+}
+
+<button class="btn btn-primary" @onclick="AddBoardingCard">Add boarding card</button>
+
+<table class="table table-hover caption-top">
+    <caption>List of added boarding cards</caption>
+    <thead class="table-light">
+        <tr>
+            <th>Type</th>
+            <th>Origin</th>
+            <th>Destination</th>
+            <th>Number</th>
+            <th>Seat</th>
+            <th>Gate</th>
+            <th>Baggage</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (BoardingCard card in boardingCards)
+        {
+            <tr>
+                <td>@card.Type</td>
+                <td>@card.Origin</td>
+                <td>@card.Destination</td>
+                <td>@card.Number</td>
+                <td>@card.Seat</td>
+                <td>@card.Gate</td>
+                <td>@card.Baggage</td>
+                <td @onclick="() => RemoveBoardingCard(card)">❌</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="mb-3">
+    <form method="post" @onsubmit="GetSummary" @formname="boardingCardsSummary">
+        <input type="submit" name="name" value="Submit boarding cards" class="btn btn-success" />
+    </form>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5>Summary</h5>
+        @Summary
+    </div>
+</div>
+
+@code {
+    private BoardingCardType Type;
+    private string Origin;
+    private string Destination;
+    private string? Number;
+    private string? Seat;
+    private string? Gate;
+    private string? Baggage;
+
+    private string? Summary;
+
+    List<BoardingCard> boardingCards = [];
+
+    private void AddBoardingCard()
+    {
+        BoardingCard boardingCard = new(Type, Origin, Destination, Number, Seat, Gate, Baggage);
+        boardingCards.Add(boardingCard);
+
+        Origin = string.Empty;
+        Destination = string.Empty;
+        Number = null;
+        Seat = null;
+        Gate = null;
+        Baggage = null;
+    }
+
+    private void RemoveBoardingCard(BoardingCard boardingCard)
+    {
+        boardingCards.Remove(boardingCard);
+    }
+
+    private async void GetSummary()
+    {
+        Summary = await client.GetBoardingCardsSummaryAsync(boardingCards)
+                  ?? "An error occurred, please check again the submitted cards!";
+        StateHasChanged();
+    }
+}
